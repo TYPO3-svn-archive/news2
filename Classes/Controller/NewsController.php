@@ -55,19 +55,6 @@ class Tx_News2_Controller_NewsController extends Tx_Extbase_MVC_Controller_Actio
 	 * @return void
 	 */
 	public function initializeAction() {
-//		$this->newsRepository = t3lib_div::makeInstance('Tx_News2_Domain_Repository_NewsRepository');
-
-		$this->newsRepository->setCategories($this->settings['category']);
-		$this->newsRepository->setCategorySettings($this->settings['categoryMode']);
-		$this->newsRepository->setTopNewsRestriction($this->settings['topNews']);
-		$this->newsRepository->setArchiveSettings($this->settings['archive']);
-		$this->newsRepository->setOrder($this->settings['orderBy'] . ' ' . $this->settings['orderAscDesc']);
-		$this->newsRepository->setOrderRespectTopNews($this->settings['orderByRespectTopNews']);
-		$this->newsRepository->setLimit($this->settings['limit']);
-		$this->newsRepository->setOffset($this->settings['offset']);
-		$this->newsRepository->setSearchFields($this->settings['search']['fields']);
-		$this->newsRepository->setStoragePage(Tx_News2_Service_RecursivePidListService::find($this->settings['startingpoint'], $this->settings['recursive']));
-
 		if (isset($this->settings['format'])) {
 			$this->request->setFormat($this->settings['format']);
 		}
@@ -75,6 +62,23 @@ class Tx_News2_Controller_NewsController extends Tx_Extbase_MVC_Controller_Actio
 //		t3lib_div::print_array($this->settings);
 	}
 
+	protected function createDemandObjectFromSettings($settings) {
+		$demandObject = $this->objectManager->get('Tx_News2_Domain_Model_NewsDemand');
+
+		$demandObject->setCategories($this->settings['category']);
+		$demandObject->setCategorySettings($this->settings['categoryMode']);
+		$demandObject->setTopNewsRestriction($this->settings['topNews']);
+		$demandObject->setArchiveSettings($this->settings['archive']);
+		$demandObject->setOrder($this->settings['orderBy'] . ' ' . $this->settings['orderAscDesc']);
+		$demandObject->setOrderRespectTopNews($this->settings['orderByRespectTopNews']);
+		$demandObject->setLimit($this->settings['limit']);
+		$demandObject->setOffset($this->settings['offset']);
+		$demandObject->setSearchFields($this->settings['search']['fields']);
+		$demandObject->setStoragePage(Tx_News2_Service_RecursivePidListService::find($this->settings['startingpoint'],
+			$this->settings['recursive']));
+
+		return $demandObject;
+	}
 
 	/**
 	 * Output a list view of news
@@ -82,13 +86,16 @@ class Tx_News2_Controller_NewsController extends Tx_Extbase_MVC_Controller_Actio
 	 * return Tx_News2_Domain_Repository_NewsRepository news
 	 */
 	public function listAction() {
+
 			// If the TypoScript config is not set return an error
 		if (!$this->settings['list']) {
 			$this->flashMessages->add($this->localize('list.settings.notfound'), t3lib_FlashMessage::ERROR);
 			return NULL;
 		}
 
-		$newsRecords = $this->newsRepository->findList();
+		$demandObject = $this->createDemandObjectFromSettings($this->settings);
+		$newsRecords = $this->newsRepository->findDemanded($demandObject);
+
 		$this->view->assign('news', $newsRecords);
 	}
 
