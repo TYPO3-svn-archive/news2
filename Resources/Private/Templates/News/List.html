@@ -1,0 +1,23 @@
+{namespace n=Tx_News2_ViewHelpers}
+<f:layout name="General" />
+<!--
+	=====================
+		Templates/News/List.html
+-->
+
+<f:section name="content">
+<f:if condition="{news}">
+	<f:then>
+		<div class="news2 news2-list-view">
+			<f:widget.paginate objects="{news}" as="paginatedNews" configuration="{settings.list.paginate}">
+				<f:for each="{paginatedNews}" as="newsItem">
+					<f:render partial="List/Item" arguments="{newsItem: newsItem, settings:settings, className:className, view:'list'}"/>
+				</f:for>
+			</f:widget.paginate>
+		</div>
+	</f:then>
+	<f:else>
+		<f:render partial="List/NoNewsFound" />
+	</f:else>
+</f:if>
+</f:section>

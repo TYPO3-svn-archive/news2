@@ -1,0 +1,26 @@
+<rss version="2.0">
+	{namespace n=Tx_News2_ViewHelpers}
+	<title></title>
+	<link></link>
+	<description></description>
+	<language></language>
+	<copyright></copyright>
+	<pubDate></pubDate>
+	<lastBuildDate></lastBuildDate>
+	<category></category>
+	<generator>CMS TYPO3, EXT:news2</generator>
+
+	<channel>
+		<f:if condition="{news}"><f:for each="{news}" as="newsItem">
+			<item>
+				<title>{newsItem.title}</title>
+				<link>
+					<n:link newsItem="{newsItem}" settings="{settings}" linkOnly="TRUE" hsc="TRUE"></n:link>
+				</link>
+				<description>
+					<n:format.striptags>{newsItem.teaser}</n:format.striptags>
+				</description>
+			</item>
+		</f:for></f:if>
+	</channel>
+</rss>

@@ -1,0 +1,28 @@
+{namespace n=Tx_News2_ViewHelpers}
+<!--
+	=====================
+		Templates/News/List.html
+-->
+
+<h1>Archive Menu</h1>
+
+<f:if condition="{years}">
+	<f:then>
+		<div class="news2 news2-archive-menu">
+				<ul class="news2 news2-archive-menu years">
+				<f:for each="{years}" as="year" key="yEl">
+					<li>
+						{yEl}<ul class="news2 news2-archive-menu months">
+						<f:for each="{year}" as="y">
+							<li><f:link.action action="listArchiveMenu" arguments="{month:y,year:yEl}">{y}</f:link.action></li>
+						</f:for>
+					</ul>
+					</li>
+				</f:for>
+				</ul>
+		</div>
+	</f:then>
+	<f:else>
+		<f:render partial="List/NoNewsFound" />
+	</f:else>
+</f:if>

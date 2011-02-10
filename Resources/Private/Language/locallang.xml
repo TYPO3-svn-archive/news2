@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'news2'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<!-- Commmon -->
+			<label index="search-text">There are %1$s results for "%2$s".</label>
+			<label index="search-start">Start search</label>
+			<label index="search-noresult">No news found.</label>
+			<label index="more-link">Read more</label>
+			<label index="back-link">Back</label>
+			<label index="related-news">Related news</label>
+			<label index="related-files">Related files</label>
+			<label index="related-links">Related links</label>
+			<label index="author">created by %s</label>
+			<label index="list.settings.notfound">List view settings not found. TypoScript included?</label>	
+
+		</languageKey>
+
+		<languageKey index="de" type="array">
+
+			<label index="SearchResult">%1$s Treffer für die Suche nach "%2$s".</label>
+		</languageKey>
+	</data>
+</T3locallang>
