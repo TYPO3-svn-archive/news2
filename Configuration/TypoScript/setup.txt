@@ -1,0 +1,121 @@
+
+# ==============================================
+# FE-Plugin configuration for EXT:news2
+# ==============================================
+
+plugin.tx_news2 {
+	view {
+		templateRootPath = {$plugin.tx_news2.view.templateRootPath}
+		partialRootPath = {$plugin.tx_news2.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_news2.view.layoutRootPath}
+	}
+	# Modify the translation
+	_LOCAL_LANG {
+		default {
+			# read_more = more >>
+		}
+	}
+
+	# ====================================
+	# Settings available inside Controller and View by accessing $this->settings or {settings.xyz}
+	# ====================================
+	settings {
+		#Displays a dummy image if the news have no media items
+		displayDummyIfNoMedia = 1
+
+		# Output format
+		format = html
+
+		# general settings
+		overrideFlexformSettingsIfEmpty = cropLength
+		pidBackAdditionalParams {
+
+		}
+		hrDates = 0
+		cropLength = 150
+
+		orderBy = datetime
+		orderAscDesc = desc
+		orderByRespectTopNews = 0
+
+		# Interface implemenations
+		interfaces {
+			media {
+				video = Tx_News2_Interfaces_Audio_Mp3,Tx_News2_Interfaces_Video_Quicktime,Tx_News2_Interfaces_Video_Flv,Tx_News2_Interfaces_Video_Videosites
+			}
+		}
+
+		# --------------
+		#  Search
+		# --------------
+		search {
+			fields = teaser,title,bodytext
+		}
+
+		# --------------
+		#  Detail
+		# --------------
+		detail {
+			# media configuration
+			media {
+				image {
+						# choose the rel tag like gallery[fo]
+					lightbox = lightbox[myImageSet]
+					maxWidth = 282
+				}
+
+				video {
+					width = 282
+					height = 300
+				}
+			}
+		}
+
+		# --------------
+		#  List
+		# --------------
+		list {
+			# media configuration
+			media {
+				image {
+					maxWidth = 100
+					maxHeight = 100
+				}
+			}
+
+			# Paginate configuration.
+			paginate {
+				itemsPerPage = 3
+				insertAbove = TRUE
+				insertBelow = TRUE
+			}
+
+			allowCategoryRestrictionFromGetParams = 1
+			allowOrderFromGetParams = 1
+		}
+
+		relatedFiles {
+			download {
+				labelStdWrap {
+					cObject = TEXT
+				}
+			}
+		}
+
+
+	}
+
+}
+
+/*
+module.tx_news2 {
+	settings < plugin.tx_news2.settings
+	persistence < plugin.tx_news2.persistence
+	view < plugin.tx_news2.view
+	view {
+#		templateRootPath = {$module.tx_news2.view.templateRootPath}
+#		partialRootPath = {$module.tx_news2.view.partialRootPath}
+#		layoutRootPath = {$module.tx_news2.view.layoutRootPath}
+	}
+}
+*/
