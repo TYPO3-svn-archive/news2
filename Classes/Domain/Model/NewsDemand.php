@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class Tx_News2_Domain_Model_NewsDemand extends Tx_Extbase_DomainObject_AbstractEntity {
+class Tx_News2_Domain_Model_NewsDemand extends Tx_Extbase_DomainObject_AbstractEntity implements Tx_News2_Domain_Model_DemandInterface {
 
 	protected $order;
 	protected $orderRespectTopNews;

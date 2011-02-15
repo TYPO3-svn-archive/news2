@@ -29,9 +29,17 @@
  * @subpackage tx_news2
  * @version $Id$
  */
-class Tx_News2_Domain_Repository_NewsRepository extends Tx_Extbase_Persistence_Repository  {
+class Tx_News2_Domain_Repository_NewsRepository extends Tx_News2_Domain_Repository_AbstractDemandedRepository  {
 
-	protected function createCategoryConstraint($query, $categories, $conjunction) {
+	/**
+	 * Returns a category contstrain created by a given list of categories and a junction string
+	 *
+	 * @param Tx_Extbase_Persistence_QueryInterface $query
+	 * @param  array $categories
+	 * @param  string $conjunction
+	 * @return Tx_Extbase_Persistence_QOM_Constrain|null
+	 */
+	protected function createCategoryConstraint(Tx_Extbase_Persistence_QueryInterface $query, $categories, $conjunction) {
         $constraint = NULL;
 		$categoryConstraints = array();
 
@@ -41,7 +49,7 @@ class Tx_News2_Domain_Repository_NewsRepository extends Tx_Extbase_Persistence_R
 
 		switch($conjunction) {
 			case 'or' :
-				$constraint = $query->logicalOr($categoryConstraints );
+				$constraint = $query->logicalOr($categoryConstraints);
 				break;
 
 			case 'notor' :
@@ -60,10 +68,26 @@ class Tx_News2_Domain_Repository_NewsRepository extends Tx_Extbase_Persistence_R
 		return $constraint;
 	}
 
-	protected function createConstraintsFromDemand($query, $demand) {
+	/**
+	 * Returns an array of constraints created from a given demand object.
+	 *
+	 * @param Tx_Extbase_Persistence_QueryInterface $query
+	 * @param Tx_News2_Domain_Model_DemandInterface $demand
+	 * @return array<Tx_Extbase_Persistence_QOM_Constrain>
+	 */
+	protected function createConstraintsFromDemand(Tx_Extbase_Persistence_QueryInterface $query, Tx_News2_Domain_Model_DemandInterface $demand) {
 		$constraints = array();
-		$constraints[] = $this->createCategoryConstraint($query, $demand->getCategories(), $demand->getCategorySetting());
-		$constraints[] = $this->createCategoryConstraint($query, $demand->getAdditionalCategories(), $demand->getAdditionalCategorySetting());
+
+		if ($demand->getCategories() && $demand->getCategories() !== '0') {
+			$constraints[] = $this->createCategoryConstraint($query, $demand->getCategories(),
+				$demand->getCategorySetting());
+		}
+
+		if ($demand->getAdditionalCategories()) {
+			$constraints[] = $this->createCategoryConstraint($query, $demand->getAdditionalCategories(),
+				$demand->getAdditionalCategorySetting());
+		}
+
 
 		if ($demand->getArchiveSetting() == 'archived') {
 			$constraints[] = $query->logicalAnd(
@@ -95,7 +119,13 @@ class Tx_News2_Domain_Repository_NewsRepository extends Tx_Extbase_Persistence_R
 		return $constraints;
 	}
 
-	protected function createOrderingsFromDemand($demand) {
+	/**
+	 * Returns an array of orderings created from a given demand object.
+	 *
+	 * @param Tx_News2_Domain_Model_DemandInterface $demand
+	 * @return array<Tx_Extbase_Persistence_QOM_Constrain>
+	 */
+	protected function createOrderingsFromDemand(Tx_News2_Domain_Model_DemandInterface $demand) {
 		$orderings = array();
 		if ($demand->getOrderRespectTopNews()) {
 			$orderings['istopnews'] = Tx_Extbase_Persistence_QueryInterface::ORDER_DESCENDING;
@@ -121,42 +151,5 @@ class Tx_News2_Domain_Repository_NewsRepository extends Tx_Extbase_Persistence_R
 		return $orderings;
 	}
 
-	public function findDemanded(Tx_News2_Domain_Model_NewsDemand $demand) {
-		$query = $this->createQuery();
-
-		if($constraints = $this->createConstraintsFromDemand($query, $demand)) {
-        	$query->matching(
-				$query->logicalAnd($constraints)
-			);
-		}
-
-		if ($orderings = $this->createOrderingsFromDemand($demand)) {
-			$query->setOrderings($orderings);
-		}
-
-		if ($demand->getLimit() != NULL) {
-			$query->setLimit($demand->getLimit());
-		}
-
-		if ($demand->getOffset() != NULL) {
-			$query->setOffset($demand->getOffset());
-		}
-
-		return $query->execute();
-	}
-
-	public function countDemanded(Tx_News2_Domain_Model_NewsDemand $demand) {
-		$query = $this->createQuery();
-
-		if($constraints = $this->createConstraintsFromDemand($query, $demand)) {
-        	$query->matching(
-				$query->logicalAnd($constraints)
-			);
-		}
-
-		return $query->count();
-	}
-
 }
-
 ?>

@@ -66,9 +66,9 @@ class Tx_News2_Controller_NewsController extends Tx_Extbase_MVC_Controller_Actio
 		$demandObject = $this->objectManager->get('Tx_News2_Domain_Model_NewsDemand');
 
 		$demandObject->setCategories($this->settings['category']);
-		$demandObject->setCategorySettings($this->settings['categoryMode']);
-		$demandObject->setTopNewsRestriction($this->settings['topNews']);
-		$demandObject->setArchiveSettings($this->settings['archive']);
+		$demandObject->setCategorySetting($this->settings['categoryMode']);
+		$demandObject->setTopNewsSetting($this->settings['topNews']);
+		$demandObject->setArchiveSetting($this->settings['archive']);
 		$demandObject->setOrder($this->settings['orderBy'] . ' ' . $this->settings['orderAscDesc']);
 		$demandObject->setOrderRespectTopNews($this->settings['orderByRespectTopNews']);
 		$demandObject->setLimit($this->settings['limit']);
