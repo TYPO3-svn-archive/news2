@@ -33,7 +33,7 @@
 class Tx_News2_Tests_Unit_Domain_Repository_NewsRepositoryTest extends Tx_Extbase_Tests_Unit_BaseTestCase {
 
 	/**
-	 * dataProvider for  createCategoryConstraintCreatesRightJunctions
+	 * dataProvider for createCategoryConstraint_creates_correct_junctions
 	 * @return array
 	 */
 	public function conjunctionNameProvider() {
@@ -50,7 +50,7 @@ class Tx_News2_Tests_Unit_Domain_Repository_NewsRepositoryTest extends Tx_Extbas
 	 * @dataProvider conjunctionNameProvider
 	 * @return void
 	 */
-	public function createCategoryConstraintCreatesRightJunctions($junctionName, $outerConstraintType, $innerConstraintType) {
+	public function createCategoryConstraint_creates_correct_junctions($junctionName, $outerConstraintType, $innerConstraintType) {
 		$newsRepository = $this->getAccessibleMock('Tx_News2_Domain_Repository_NewsRepository', array('dummy'));
 		$query = $newsRepository->createQuery();
 
@@ -62,5 +62,30 @@ class Tx_News2_Tests_Unit_Domain_Repository_NewsRepositoryTest extends Tx_Extbas
 			$this->assertType($innerConstraintType, $resultQuery->getConstraint());
 		}
 	}
+
+	/**
+	 * @test
+	 * @return void
+	 */
+	public function findDemanded_calls_createConstraintsFromDemand_once() {
+		$mockDemand = $this->getMock('Tx_News2_Domain_Model_NewsDemand');
+		$newsRepository = $this->getAccessibleMock('Tx_News2_Domain_Repository_NewsRepository', array('createConstraintsFromDemand'));
+		$newsRepository->expects($this->once())->method('createConstraintsFromDemand');
+
+		$newsRepository->findDemanded($mockDemand);
+	}
+
+	/**
+	 * @test
+	 * @return void
+	 */
+	public function findDemanded_calls_createOrderingsFromDemand_once() {
+		$mockDemand = $this->getMock('Tx_News2_Domain_Model_NewsDemand');
+		$newsRepository = $this->getAccessibleMock('Tx_News2_Domain_Repository_NewsRepository', array('createOrderingsFromDemand'));
+		$newsRepository->expects($this->once())->method('createOrderingsFromDemand');
+		$newsRepository->findDemanded($mockDemand);
+	}
+
+
 }
 ?>
