@@ -48,19 +48,19 @@ class Tx_News2_Domain_Repository_NewsRepository extends Tx_News2_Domain_Reposito
 		}
 
 		switch($conjunction) {
-			case 'or' :
+			case 'or':
 				$constraint = $query->logicalOr($categoryConstraints);
 				break;
 
-			case 'notor' :
+			case 'notor':
 				$constraint =  $query->logicalNot($query->logicalOr($categoryConstraints));
 				break;
 
-			case 'notand' :
+			case 'notand':
 				$constraint = $query->logicalNot($query->logicalAnd($categoryConstraints));
 				break;
 
-			case 'and' :
+			case 'and':
 			default:
 				$constraint = $query->logicalAnd($categoryConstraints);
 		}
