@@ -81,7 +81,7 @@ class Tx_News2_Controller_NewsController extends Tx_Extbase_MVC_Controller_Actio
 	/**
 	 * Output a list view of news
 	 *
-	 * return Tx_News2_Domain_Repository_NewsRepository news
+	 * return string the Rendered view
 	 */
 	public function listAction() {
 
@@ -91,53 +91,33 @@ class Tx_News2_Controller_NewsController extends Tx_Extbase_MVC_Controller_Actio
 			return NULL;
 		}
 
-		$demandObject = $this->createDemandObjectFromSettings($this->settings);
-		$newsRecords = $this->newsRepository->findDemanded($demandObject);
+		$demand = $this->createDemandObjectFromSettings($this->settings);
+		$newsRecords = $this->newsRepository->findDemanded($demand);
 
 		$this->view->assign('news', $newsRecords);
 	}
 
 	/**
+	 * Displays the news search form
 	 *
-	 * Search for news
-	 *
-	 * @param Tx_News2_Domain_Model_Search $search
+	 * @return string the Rendered view
 	 */
-	public function searchAction(Tx_News2_Domain_Model_Search $search = NULL) {
-		if ($search === NULL) {
-			$search = new Tx_News2_Domain_Model_Search();
-		} else {
-			var_dump($search);
-		}
-
-		/** @var Tx_News2_Domain_Repository_CategoryRepository */
-		$categoryRepository = t3lib_div::makeInstance('Tx_News2_Domain_Repository_CategoryRepository');
-		$categoryRepository->setUidList($this->settings['category']);
-		$categories = $categoryRepository->findByIdList();
-		$search->setCategory($categories);
-
-//		var_dump($search->getCategory());
-
-		$this->view->assign('search', $search);
+	public function searchAction() {
+		$demand = $this->createDemandObjectFromSettings($this->settings);
+		$this->view->assign('demand', $demand);
 	}
 
 	/**
-	 * Search Result
+	 * Displays the news search result
 	 *
-	 * @param Tx_News2_Domain_Model_Search $search
+	 * @param Tx_News2_Domain_Model_NewsDemand $demand
+	 * @return string the Rendered view
 	 */
-	public function searchResultAction(Tx_News2_Domain_Model_Search $search = NULL) {
-		$this->view->assign('search', $search);
-
-			// if a search is submitted
-		if($search !== NULL) {
-			var_dump($search->getCategory());
-
-			$newsRecords = $this->newsRepository->findBySearch($search);
-			$this->view->assign('news', $newsRecords);
-
-
-		}
+	public function searchResultAction(Tx_News2_Domain_Model_NewsDemand $demand) {
+		$this->view->assignMultiple(array(
+			'demand' => $demand,
+			'news' => $this->newsRepository->findDemanded($demand)
+		));
 	}
 
 	/**
