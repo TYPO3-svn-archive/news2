@@ -83,12 +83,6 @@ class Tx_News2_Domain_Repository_NewsRepository extends Tx_News2_Domain_Reposito
 				$demand->getCategorySetting());
 		}
 
-		if ($demand->getAdditionalCategories()) {
-			$constraints[] = $this->createCategoryConstraint($query, $demand->getAdditionalCategories(),
-				$demand->getAdditionalCategorySetting());
-		}
-
-
 		if ($demand->getArchiveSetting() == 'archived') {
 			$constraints[] = $query->logicalAnd(
 				$query->lessThan('archive', $GLOBALS['EXEC_TIME']),

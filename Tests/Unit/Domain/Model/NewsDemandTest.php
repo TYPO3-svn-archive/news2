@@ -75,26 +75,6 @@ class Tx_News2_Tests_Unit_Domain_Model_NewsDemandTest extends Tx_Extbase_Tests_U
 	/**
 	 * @test
 	 */
-	public function additionalCategoriesCanBeSet() {
-		$domainModelInstance = new Tx_News2_Domain_Model_NewsDemand();
-		$additionalCategories = 'Test additionalCategories';
-		$domainModelInstance->setAdditionalCategories($additionalCategories);
-		$this->assertEquals($additionalCategories, $domainModelInstance->getAdditionalCategories());
-	}
-
-	/**
-	 * @test
-	 */
-	public function additionalCategorySettingCanBeSet() {
-		$domainModelInstance = new Tx_News2_Domain_Model_NewsDemand();
-		$additionalCategorySetting = 'Test additionalCategorySetting';
-		$domainModelInstance->setAdditionalCategorySetting($additionalCategorySetting);
-		$this->assertEquals($additionalCategorySetting, $domainModelInstance->getAdditionalCategorySetting());
-	}
-
-	/**
-	 * @test
-	 */
 	public function archiveSettingCanBeSet() {
 		$domainModelInstance = new Tx_News2_Domain_Model_NewsDemand();
 		$archiveSetting = 'Test archiveSetting';

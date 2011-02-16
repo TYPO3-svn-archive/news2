@@ -30,9 +30,6 @@ class Tx_News2_Domain_Model_NewsDemand extends Tx_Extbase_DomainObject_AbstractE
 	protected $categories;
 	protected $categorySetting;
 
-	protected $additionalCategories;
-	protected $additionalCategorySetting = 'and';
-
 	protected $archiveSetting;
 	protected $latestTimeLimit = NULL;
 
@@ -43,23 +40,6 @@ class Tx_News2_Domain_Model_NewsDemand extends Tx_Extbase_DomainObject_AbstractE
 
 	protected $limit;
 	protected $offset;
-
-
-	public function setAdditionalCategories($additionalCategories) {
-		$this->additionalCategories = $additionalCategories;
-	}
-
-	public function getAdditionalCategories() {
-		return $this->additionalCategories;
-	}
-
-	public function setAdditionalCategorySetting($additionalCategorySetting) {
-		$this->additionalCategorySetting = $additionalCategorySetting;
-	}
-
-	public function getAdditionalCategorySetting() {
-		return $this->additionalCategorySetting;
-	}
 
 	public function setArchiveSetting($archiveSetting) {
 		$this->archiveSetting = $archiveSetting;

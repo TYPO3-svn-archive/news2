@@ -58,8 +58,6 @@ class Tx_News2_Controller_NewsController extends Tx_Extbase_MVC_Controller_Actio
 		if (isset($this->settings['format'])) {
 			$this->request->setFormat($this->settings['format']);
 		}
-		$this->requestOverrule();
-//		t3lib_div::print_array($this->settings);
 	}
 
 	protected function createDemandObjectFromSettings($settings) {
@@ -190,47 +188,6 @@ class Tx_News2_Controller_NewsController extends Tx_Extbase_MVC_Controller_Actio
 	}
 
 	/**
-	 * Allow overruling of settings by get request
-	 */
-	protected function requestOverrule() {
-		$requests = $this->request->getArguments();
-
-			// category restriction
-		if (isset($requests['category']) && $this->accessCheck('allowCategoryRestrictionFromGetParams')) {
-			$this->newsRepository->setAdditionalCategories($requests['category']);
-		}
-
-			// ordering
-		if (isset($requests['order']) && $this->accessCheck('allowOrderFromGetParams')) {
-			$order = $requests['order'];
-			if (isset($requests['orderDirection'])) {
-				$order .= ' ' . $requests['orderDirection'];
-			}
-
-			$this->newsRepository->setOrder($order);
-		}
-	}
-
-	/**
-	 * Check access which can be set for each action by using <action>.<setting> = 1
-	 *
-	 * @param  string $setting name of the setting
-	 * @return bool
-	 */
-	protected function accessCheck($setting) {
-		$access = FALSE;
-			// remove the Action from the method: listAction > list
-		$actionName = str_replace('Action', '', $this->actionMethodName);
-
-		if ($this->settings[$actionName][$setting] == 1) {
-			$access = TRUE;
-		}
-
-		return $access;
-	}
-
-
-	/**
 	 * Injects the Configuration Manager and is initializing the framework settings
 	 * Function is used to override the merge of settings via TS & flexforms
 	 *
@@ -263,8 +220,5 @@ class Tx_News2_Controller_NewsController extends Tx_Extbase_MVC_Controller_Actio
 
 		$this->settings = $originalSettings;
 	}
-
-
 }
-
 ?>
